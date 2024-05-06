@@ -1,37 +1,28 @@
+const {
+        Control
+} = require('magic-home')
 var express = require('express')
 var app = express()
+app.use(express.static('public'))
 
-app.get('/on', (req, res) => res.send("power on"))
-app.get('/off', (req, res) => res.send("power off"))
+var light = new Control("192.168.1.154")
+
 app.get('/set', (req, res) => {
-        let color = {
-                r: req.query.r,
-                g: req.query.g,
-                b: req.query.b
+        if (!light) return
+        const q = req.query
+        try {
+                if (q.power == 'on') light.turnOn()
+                if (q.power == 'off') light.turnOff()
+                if (q.r && q.g && q.b) light.setColor(q.r, q.g, q.b)
+        } catch (err) {
+                console.log(err)
+        } finally {
+                res.redirect('/')
         }
-        // set magic-home color
-        res.send(color)
 })
 
 app.get('/', (req, res) => {
-
-        // powerHandler = () => window.location.replace("http://localhost:8080/on") 
-
-        res.send(`
-<button onclick=window.location.replace("http://localhost:8080/on")> POWER </button>
-<label for="panelPicker"></label>
-<div class="color-picker">
-  <input
-    id="panelPicker"
-    name="panelPicker"
-    data-function="color-picker"
-    data-format="hex"
-    data-color-presets="red,green,blue"
-    class="color-preview"
-    value="#069"
-  />
-</div>
-	`)
+        res.sendFile('index.html')
 })
 
 let server = app.listen(8080, function() {
