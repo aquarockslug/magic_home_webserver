@@ -4,27 +4,24 @@ const {
 var express = require('express')
 var app = express()
 app.use(express.static('public'))
+app.use(require('body-parser').json())
 
 var light = new Control("192.168.1.154")
 
-app.get('/set', (req, res) => {
-        if (!light) return
-        const q = req.query
+app.get('/on', (_, res) => light.setPower(true, () => res.end()))
+app.get('/off', (_, res) => light.setPower(false, () => res.end(light)))
+app.post('/set', (req, res) => {
+        const b = req.body
         try {
-                if (q.power == 'on') light.turnOn()
-                if (q.power == 'off') light.turnOff()
-                if (q.r && q.g && q.b) light.setColor(q.r, q.g, q.b)
+                if (b.power == 'on') light.turnOn()
+                if (b.power == 'off') light.turnOff()
+                if (b.r && b.g && b.b) light.setColor(b.r, b.g, b.b)
         } catch (err) {
                 console.log(err)
         } finally {
-                res.redirect('/')
+                res.end('200')
         }
 })
 
-app.get('/', (req, res) => {
-        res.sendFile('index.html')
-})
-
-let server = app.listen(8080, function() {
-        console.log('Server is listening on port 8080')
-});
+app.get('/', (_, res) => res.sendFile('index.html'))
+app.listen(8080, () => console.log('Server is listening on port 8080'))

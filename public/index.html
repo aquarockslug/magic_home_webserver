@@ -11,26 +11,23 @@
 
 <body>
         <script>
-                var picker = {
-                        r: () => 55,
-                        g: () => 255,
-                        b: () => 0, // panelPicker.value
-                }
-                var updatePanel = () => set(`r=${picker.r()}&g=${picker.g()}&b=${picker.b()}`)
-                var set = (qs) => window.location.href = `${window.location.origin}/set?${qs}`
+                var power = (val) => window.location.href =
+                        `${window.location.origin}/${val ? 'on' : 'off'}`
         </script>
         <div>
-                <button onclick=set('power=on')> POWER ON </button>
-                <button onclick=set('power=off')> POWER OFF </button>
+                <button onclick=power(true)> POWER ON </button>
+                <button onclick=power(false)> POWER OFF </button>
         </div>
 
         <br>
 
-        <div class="color-picker">
+        <form class="color-picker" id="form-id" method="post" action="/set">
                 <label for="panelPicker">Panel Color:</label>
-                <input id="panelPicker" name="panelPicker" data-format="rgb" data-color-presets="red,green,blue" class="color-preview" value="rgb(55, 255, 0)" />
-        </div>
-        <button onclick=updatePanel()> SET </button>
+                <input id="panelPicker" data-format="rgb" data-color-presets="red,green,blue" class="color-preview" value="rgb(55, 255, 0)" />
+        </form>
+        <button onclick=updatePanel()>
+                <div onclick="document.getElementById('form-id').submit();">SET</div>
+        </button>
         <script>
                 var panelPicker = new ColorPicker('#panelPicker')
         </script>
