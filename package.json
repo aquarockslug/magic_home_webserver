@@ -1,0 +1,16 @@
+{
+  "name": "magic-home-weserver",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "nodemon run start"
+  },
+  "keywords": [],
+  "author": "Aquarock",
+  "license": "ISC",
+  "dependencies": {
+    "@thednp/color-picker": "2.0.0-alpha10",
+    "express": "^4.19.2"
+  }
+}
