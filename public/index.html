@@ -6,7 +6,25 @@
         <title>Panel Controller</title>
         <meta name="viewport" content="width=device-width,initial-scale=1">
         <link rel="stylesheet" href="color-picker.min.css" rel="stylesheet" />
+        <link rel="stylesheet" type="text/css" href="button.css" />
         <script src="color-picker.js"></script>
+        <style>
+                #main-menu {
+                        display: flex;
+                        flex-direction: column;
+                        margin: auto;
+                        width: 66%;
+                        background-color: blue;
+                        border: 3px solid black;
+                        padding: 20px;
+                }
+
+                #color-control,
+                #power-control {
+                        display: flex;
+                        justify-content: center
+                }
+        </style>
 </head>
 
 <body>
@@ -14,20 +32,18 @@
                 var power = (val) => window.location.href =
                         `${window.location.origin}/${val ? 'on' : 'off'}`
         </script>
-        <div>
-                <button onclick=power(true)> POWER ON </button>
-                <button onclick=power(false)> POWER OFF </button>
+        <div id=main-menu>
+                <div id="power-control">
+                        <button class="button-23" onclick=power(true)> ON </button>
+                        <button class="button-23" onclick=power(false)> OFF </button>
+                </div>
+                <div id="color-control">
+                        <form class="color-picker" id="picker-form-id" method="post" action="/set">
+                                <input id="panelPicker" data-format="rgb" data-color-presets="red,green,blue" class="color-preview" value="rgb(55, 255, 0)" />
+                        </form>
+                        <button class="button-23" onclick="document.getElementById('picker-form-id').submit();">SET</button>
+                </div>
         </div>
-
-        <br>
-
-        <form class="color-picker" id="form-id" method="post" action="/set">
-                <label for="panelPicker">Panel Color:</label>
-                <input id="panelPicker" data-format="rgb" data-color-presets="red,green,blue" class="color-preview" value="rgb(55, 255, 0)" />
-        </form>
-        <button onclick=updatePanel()>
-                <div onclick="document.getElementById('form-id').submit();">SET</div>
-        </button>
         <script>
                 var panelPicker = new ColorPicker('#panelPicker')
         </script>
