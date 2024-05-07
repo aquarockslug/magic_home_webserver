@@ -12,17 +12,29 @@
                 #main-menu {
                         display: flex;
                         flex-direction: column;
+                        justify-content: space-around;
                         margin: auto;
-                        width: 66%;
-                        background-color: blue;
+                        width: 75%;
+                        height: 150px;
+                        background-color: grey;
                         border: 3px solid black;
-                        padding: 20px;
+                        padding: 25px;
                 }
 
                 #color-control,
                 #power-control {
                         display: flex;
-                        justify-content: center
+                        width: 100%;
+                        justify-content: space-around;
+                }
+
+                #power-control button {
+                        width: 45%
+                }
+
+                #panel-picker,
+                #picker-form-id {
+                        width: 100%
                 }
         </style>
 </head>
@@ -39,13 +51,13 @@
                 </div>
                 <div id="color-control">
                         <form class="color-picker" id="picker-form-id" method="post" action="/set">
-                                <input id="panelPicker" data-format="rgb" data-color-presets="red,green,blue" class="color-preview" value="rgb(55, 255, 0)" />
+                                <input id="panel-picker" data-format="rgb" data-color-presets="red,green,blue" class="color-preview" value="rgb(55, 255, 0)" />
                         </form>
                         <button class="button-23" onclick="document.getElementById('picker-form-id').submit();">SET</button>
                 </div>
         </div>
         <script>
-                var panelPicker = new ColorPicker('#panelPicker')
+                var panelPicker = new ColorPicker('#panel-picker')
         </script>
 </body>
 

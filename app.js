@@ -4,7 +4,6 @@ const {
 var express = require('express')
 var app = express()
 app.use(express.static('public'))
-app.use(require('body-parser').json())
 
 var light = new Control("192.168.1.154")
 
