@@ -13,6 +13,7 @@
         "dependencies": {
                 "@thednp/color-picker": "2.0.0-alpha10",
                 "express": "^4.19.2",
-                "magic-home": "^2.9.0"
+                "magic-home": "^2.9.0",
+                "systeminformation": "^5.22.8"
         }
 }

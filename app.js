@@ -1,14 +1,16 @@
 const {
         Control
 } = require('magic-home')
+var sysinfo = require('systeminformation')
 var express = require('express')
 var app = express()
 app.use(express.static('public'))
 
 var light = new Control("192.168.1.154")
 
-app.get('/on', (_, res) => light.setPower(true, () => res.end()))
+app.get('/on', (_, res) => light.setPower(true, () => res.end(light)))
 app.get('/off', (_, res) => light.setPower(false, () => res.end(light)))
+app.get('/white', (_, res) => sysinfo.fsSize().then(data => res.send(data)))
 app.post('/set', (req, res) => {
         const b = req.body
         try {
