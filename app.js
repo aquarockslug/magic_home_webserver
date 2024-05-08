@@ -21,7 +21,7 @@ app.post('/panel', (req, res) => {
                 if (b.power == 'on') light.turnOn()
                 if (b.power == 'off') light.turnOff()
                 if (b.r && b.g && b.b) light.setColor(b.r, b.g, b.b)
-        } catch (err) s{
+        } catch (err) {
                 console.log(err)
         } finally {
                 res.end('200')
