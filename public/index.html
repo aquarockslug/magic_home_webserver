@@ -9,55 +9,59 @@
         <link rel="stylesheet" type="text/css" href="button.css" />
         <script src="color-picker.js"></script>
         <style>
+                body {
+                        display: flex;
+                        justify-content: center
+                }
+
                 #main-menu {
                         display: flex;
                         flex-direction: column;
                         justify-content: space-around;
-                        margin: auto;
-                        width: 75%;
-                        height: 150px;
-                        background-color: grey;
-                        border: 3px solid black;
+                        width: 90%;
+                        border: 1px solid #222222;
                         padding: 25px;
-                }
-
-                #color-control,
-                #power-control {
-                        display: flex;
-                        width: 100%;
-                        justify-content: space-around;
-                }
-
-                #power-control button {
-                        width: 45%
+                        border-radius: 8px;
                 }
 
                 #panel-picker,
-                #picker-form-id {
-                        width: 100%
+                #main-menu .button-23 {
+                        width: 95%;
+                        height: 95px;
+                        margin: 5%;
+                        text-align: center;
+                        border-radius: 8px;
+                }
+
+                #color-control {
+                        width: 100%;
+                }
+
+                .menu-toggle {
+                        width: 10%;
+                        margin: auto;
+                        border-radius: 8px;
                 }
         </style>
 </head>
 
 <body>
-        <script>
-                var power = (val) => window.location.href =
-                        `${window.location.origin}/${val ? 'on' : 'off'}`
-        </script>
         <div id=main-menu>
                 <div id="power-control">
-                        <button class="button-23" onclick=power(true)> ON </button>
-                        <button class="button-23" onclick=power(false)> OFF </button>
+                        <button id="powerButton" class="button-23" onclick=powerHandler()> OFF </button>
                 </div>
-                <div id="color-control">
-                        <form class="color-picker" id="picker-form-id" method="post" action="/set">
+                <form class="color-picker" id="picker-form-id" method="post" action="/panel">
+                        <div id="color-control">
                                 <input id="panel-picker" data-format="rgb" data-color-presets="red,green,blue" class="color-preview" value="rgb(55, 255, 0)" />
-                        </form>
-                        <button class="button-23" onclick="document.getElementById('picker-form-id').submit();">SET</button>
-                </div>
+                        </div>
+                </form>
+                <button class="button-23" onclick="document.getElementById('picker-form-id').submit()">SET</button>
         </div>
         <script>
                 var panelPicker = new ColorPicker('#panel-picker')
+                var power = document.getElementById('powerButton')
+                var powerHandler = () =>
+                        power.innerText = power.innerText == 'OFF' ? 'ON' : 'OFF'
         </script>
 </body>
 

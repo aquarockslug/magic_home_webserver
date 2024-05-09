@@ -8,6 +8,9 @@ dependencies:
   '@thednp/color-picker':
     specifier: 2.0.0-alpha10
     version: 2.0.0-alpha10
+  body-parser:
+    specifier: ^1.20.2
+    version: 1.20.2
   express:
     specifier: ^4.19.2
     version: 4.19.2
