@@ -22,18 +22,23 @@ app.get('/sysinfo', async (_, res) => sysinfo.get({
 }).then(data => res.send(data)))
 
 // light service
-var light = new Control("192.168.1.154", {})
-app.get('/on', (_, res) => light.setPower(true, () => res.end(light)))
-app.get('/off', (_, res) => light.setPower(false, () => res.end(light)))
+app.get('/on', (_, res) => light.setPower(true, () => res.end('200')))
+app.get('/off', (_, res) => light.setPower(false, () => res.end('200')))
 app.post('/panel', (req, res) => {
         const state = req.body // the requested state of the light panel
+        if (!state) res.end('no request')
         try {
-                light.setPower(true)
-                light.setColor(...readColorString(state.color))
+                var light = new Control("192.168.1.156", {})
+                if (state.on) {
+                        light.turnOn()
+                        light.setColor(...readColorString(state.color))
+                } else {
+                        light.turnOff()
+                }
         } catch (err) {
                 console.log(err)
         } finally {
-                res.end(JSON.stringify(light.queryState()))
+                res.end('200')
         }
 })
 var readColorString = (colorString) => [
