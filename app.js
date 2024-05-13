@@ -39,18 +39,14 @@ app.post('/panel', async (req, res) => {
                 console.log('processing request...')
         }
 })
-var lightPromise = (light, power) => {
-        return new Promise((resolve, reject) =>
-                light.setPower(power, resolve))
-}
+var lightPowerPromise = (light, powerState) =>
+        new Promise((resolve, reject) => light.setPower(powerState, resolve))
 var updateState = async (light, newState) => {
         var oldState = await lightState(light)
-        console.log(oldState.on)
-        console.log(newState.on)
-        if (oldState.on != (newState.on == 'on' ? true : false))
-                await lightPromise(light, newState.on)
-        else console.log('no change')
-        // light.setColor(...radColorString(newState.color), () => 200)
+        oldState.on != ("on" == newState.on) ?
+                await lightPowerPromise(light, newState.on) :
+                console.log("no power state change");
+        // light.setColor(...readColorString(newState.color), () => 200)
 }
 var lightState = async (light) => light.queryState().then((data) => data)
 var readColorString = (colorString) => [
