@@ -11,7 +11,8 @@
         <style>
                 body {
                         display: flex;
-                        justify-content: center
+                        justify-content: center;
+                        background-image: url("br.jpg");
                 }
 
                 #main-menu {
@@ -24,6 +25,7 @@
                         border: 1px solid #222222;
                         padding: 25px;
                         border-radius: 8px;
+                        background-color: white
                 }
 
                 #picker-form-id,
@@ -52,10 +54,13 @@
 <body>
         <div id=main-menu>
                 <form class="color-picker" id="picker-form-id" method="post" action="/panel">
+                        <h1>Panel: </h1>
                         <input name="on" id="power-checkbox" type="checkbox" class="button-23" />
                         <input name="color" id="panel-picker" data-format="rgb" data-color-presets="red,pink,green,teal,blue,purple" class="color-preview" value="rgb(255, 0, 0)" />
                 </form>
-                <button class="button-23" onclick="document.getElementById('picker-form-id').submit()">SET</button>
+                <button class="button-23" onclick="document.getElementById('picker-form-id').submit()">
+                        <h1>SET</h1>
+                </button>
         </div>
         <script>
                 var panelPicker = new ColorPicker('#panel-picker')
