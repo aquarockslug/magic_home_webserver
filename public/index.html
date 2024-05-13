@@ -37,7 +37,7 @@
 
                 #picker-btn-0 {
                         margin: 5% 50%;
-                        width: 50%
+                        width: 50%;
                 }
 
                 .menu-toggle {
@@ -51,7 +51,7 @@
 <body>
         <div id=main-menu>
                 <form class="color-picker" id="picker-form-id" method="post" action="/panel">
-                        <input name="on" type="checkbox" class="button-23" />
+                        <input name="on" id="power-checkbox" type="checkbox" class="button-23" />
                         <input name="color" id="panel-picker" data-format="rgb" data-color-presets="red,green,blue" class="color-preview" value="rgb(55, 255, 0)" />
                 </form>
                 <button class="button-23" onclick="document.getElementById('picker-form-id').submit()">SET</button>
