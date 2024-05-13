@@ -16,6 +16,7 @@
 
                 #main-menu {
                         display: flex;
+                        margin: 5%;
                         flex-direction: column;
                         justify-items: space-around;
                         align-content: center;
@@ -52,15 +53,13 @@
         <div id=main-menu>
                 <form class="color-picker" id="picker-form-id" method="post" action="/panel">
                         <input name="on" id="power-checkbox" type="checkbox" class="button-23" />
-                        <input name="color" id="panel-picker" data-format="rgb" data-color-presets="red,green,blue" class="color-preview" value="rgb(55, 255, 0)" />
+                        <input name="color" id="panel-picker" data-format="rgb" data-color-presets="red,pink,green,teal,blue,purple" class="color-preview" value="rgb(255, 0, 0)" />
                 </form>
                 <button class="button-23" onclick="document.getElementById('picker-form-id').submit()">SET</button>
         </div>
         <script>
                 var panelPicker = new ColorPicker('#panel-picker')
                 var power = document.getElementById('powerButton')
-                var powerHandler = () =>
-                        power.innerText = power.innerText == 'OFF' ? 'ON' : 'OFF'
         </script>
 </body>
 

@@ -42,13 +42,6 @@ app.post('/panel', async (req, res) => {
 var getLightState = async (light) => light.queryState().then((data) => data)
 var updateLightState = async (light, newState) => {
         var oldState = await getLightState(light)
-        // update power state
-        var lightPowerPromise = (light, powerState) =>
-                new Promise((resolve, reject) =>
-                        light.setPower(powerState, resolve))
-        oldState.on != ("on" == newState.on) ?
-                await lightPowerPromise(light, newState.on) :
-                console.log("no power state change");
 
         // update color state
         var lightColorPromise = (light, colorState) =>
@@ -61,6 +54,14 @@ var updateLightState = async (light, newState) => {
         areColorsEqual(newColor, readColor(oldState.color)) ?
                 console.log("no color state change") :
                 await lightColorPromise(light, newColor)
+
+        // update power state
+        var lightPowerPromise = (light, powerState) =>
+                new Promise((resolve, reject) =>
+                        light.setPower(powerState, resolve))
+        oldState.on != ("on" == newState.on) ?
+                await lightPowerPromise(light, newState.on) :
+                console.log("no power state change");
 }
 var readColor = (color) => { // "rgb(0, 0, 0)" or {red, green, blue} -> [0, 0, 0]  
         let readQueryColorObj = (color) => [color.red, color.green, color.blue]

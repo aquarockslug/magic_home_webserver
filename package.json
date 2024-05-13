@@ -1,7 +1,7 @@
 {
-        "name": "magic-home-weserver",
+        "name": "magic-home-webserver",
         "version": "1.0.0",
-        "description": "",
+        "description": "a webapp for controlling magic-home lights",
         "main": "app.js",
         "scripts": {
                 "start": "tmux new -s webapp -n panel -d 'node app.js'",
