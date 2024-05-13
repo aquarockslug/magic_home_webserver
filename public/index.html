@@ -9,23 +9,30 @@
         <link rel="stylesheet" type="text/css" href="button.css" />
         <script src="color-picker.js"></script>
         <style>
+                html {
+                        height: 100%;
+                }
+
                 body {
                         display: flex;
+                        height: 75%;
                         justify-content: center;
-                        background-image: url("br.jpg");
+                        align-items: stretch;
+                        background-image: url("bg.jpg");
                 }
 
                 #main-menu {
                         display: flex;
-                        margin: 5%;
+                        margin: auto;
                         flex-direction: column;
                         justify-items: space-around;
                         align-content: center;
-                        width: 90%;
+                        width: 80%;
                         border: 1px solid #222222;
                         padding: 25px;
                         border-radius: 8px;
-                        background-color: white
+                        background-color: grey;
+                        opacity: 0.75
                 }
 
                 #picker-form-id,
@@ -63,7 +70,6 @@
         </div>
         <script>
                 var panelPicker = new ColorPicker('#panel-picker')
-                var power = document.getElementById('powerButton')
         </script>
 </body>
 
