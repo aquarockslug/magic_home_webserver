@@ -41,29 +41,37 @@ app.post('/panel', async (req, res) => {
 })
 
 async function main() {
-        var timeEmitter = await createTimeEmitter()
-        timeEmitter.on('new_day', () => updateLightState(panel, {
-                color: {
-                        red: 255,
-                        green: 0,
-                        blue: 0
-                }
-        }))
+        var clock = await createTimeEmitter()
+        // clock.on('new_day', () => updateLightState(panel, getRandomState()))
+        clock.on('new_hour', () => updateLightState(panel, getRandomState()))
+        // clock.on('new_min', () => updateLightState(panel, getRandomState()))
 }
 
-var createTimeEmitter = async () => {
-        var dateEvents = new EventEmitter()
-        var getDay = async () => String(new Date().getDate()).padStart(2, '0')
-        var currentDay = await getDay()
+var createTimeEmitter = async (interval = 5000) => {
+        var getNow = async () => ({
+                day: String(new Date().getDate()).padStart(2, '0'),
+                hour: String(new Date().getHours()).padStart(2, '0'),
+                min: String(new Date().getMinutes()).padStart(2, '0')
+        })
+        var timeEvents = new EventEmitter()
+        var last = await getNow()
         setInterval(async () => {
-                const day = await getDay()
-                if (currentDay != day) {
-                        currentDay = day
-                        dateEvents.emit('new_day')
-                }
-        }, 10000)
-        return dateEvents
+                const now = await getNow()
+                if (now.day != last.day) timeEvents.emit('new_day')
+                if (now.hour != last.hour) timeEvents.emit('new_hour')
+                if (now.min != last.min) timeEvents.emit('new_min')
+                last = now
+        }, interval)
+        return timeEvents
 }
+var getRandomState = (on = "on") => ({
+        on,
+        color: {
+                red: ~~(Math.random() * 254),
+                green: ~~(Math.random() * 254),
+                blue: ~~(Math.random() * 254)
+        }
+})
 var getLightState = async (light) => light.queryState().then((data) => data)
 var updateLightState = async (light, newState) => {
         var oldState = await getLightState(light)
@@ -81,14 +89,13 @@ var updateLightState = async (light, newState) => {
         var areColorsEqual = (a, b) =>
                 a.every((element, index) => element === b[index]);
         areColorsEqual(newColor, readColor(oldState.color)) ?
-                console.log("no color state change") :
-                await lightColorPromise(light, newColor)
+                null : await lightColorPromise(light, newColor)
 
         oldState.on != ("on" == newState.on) ? // check if power state is opposite
-                await lightPowerPromise(light, newState.on) :
-                console.log("no power state change");
+                await lightPowerPromise(light, newState.on) : null
 
-        console.log("updated lighting")
+        console.log("\nupdated lighting:")
+        console.log(newState)
 }
 var readColor = (color) => { // "rgb(0, 0, 0)" or color: {red, green, blue} -> [0, 0, 0]  
         let readQueryColorObj = (color) => [color.red, color.green, color.blue]
