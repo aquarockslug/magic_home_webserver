@@ -23,14 +23,12 @@ app.get('/sysinfo', async (_, res) => sysinfo.get({
 			macHost, batteryPercent, type, connected`
 }).then(data => res.send(data)))
 
-// panel light service
+// panel light 
 var panel = new Control("192.168.1.154", {})
-app.get('/on', (_, res) => light.setPower(true, () => res.end('200')))
-app.get('/off', (_, res) => light.setPower(false, () => res.end('200')))
+app.get('/panelInfo', async (_, res) => res.send(await getLightState(panel)))
 app.post('/panel', async (req, res) => {
         const newState = req.body // the requested state of the light panel
         if (!newState) res.end('no request')
-        console.log('processing request...')
         try {
                 await updateLightState(panel, newState)
         } catch (err) {
@@ -42,17 +40,14 @@ app.post('/panel', async (req, res) => {
 
 async function main() {
         var clock = await createTimeEmitter()
-        // clock.on('new_day', () => updateLightState(panel, getRandomState()))
         clock.on('new_hour', () => updateLightState(panel, getRandomState()))
-        // clock.on('new_min', () => updateLightState(panel, getRandomState()))
 }
-
+var getNow = async () => ({
+        day: String(new Date().getDate()).padStart(2, '0'),
+        hour: String(new Date().getHours()).padStart(2, '0'),
+        min: String(new Date().getMinutes()).padStart(2, '0')
+})
 var createTimeEmitter = async (interval = 5000) => {
-        var getNow = async () => ({
-                day: String(new Date().getDate()).padStart(2, '0'),
-                hour: String(new Date().getHours()).padStart(2, '0'),
-                min: String(new Date().getMinutes()).padStart(2, '0')
-        })
         var timeEvents = new EventEmitter()
         var last = await getNow()
         setInterval(async () => {
@@ -72,6 +67,9 @@ var getRandomState = (on = "on") => ({
                 blue: ~~(Math.random() * 254)
         }
 })
+
+var lightHistory = []
+app.get('/history', async (_, res) => res.send(lightHistory))
 var getLightState = async (light) => light.queryState().then((data) => data)
 var updateLightState = async (light, newState) => {
         var oldState = await getLightState(light)
@@ -94,8 +92,9 @@ var updateLightState = async (light, newState) => {
         oldState.on != ("on" == newState.on) ? // check if power state is opposite
                 await lightPowerPromise(light, newState.on) : null
 
-        console.log("\nupdated lighting:")
-        console.log(newState)
+        newState["time"] = await getNow()
+        lightHistory.push(newState)
+        return newState
 }
 var readColor = (color) => { // "rgb(0, 0, 0)" or color: {red, green, blue} -> [0, 0, 0]  
         let readQueryColorObj = (color) => [color.red, color.green, color.blue]
