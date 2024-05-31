@@ -59,15 +59,18 @@ var createTimeEmitter = async (interval = 5000) => {
         }, interval)
         return timeEvents
 }
-var getRandomState = (on = "on") => ({
-        on,
-        color: {
-                red: ~~(Math.random() * 254),
-                green: ~~(Math.random() * 254),
-                blue: ~~(Math.random() * 254)
+var getRandomState = (on = "on") => {
+        const r = [~~(Math.random() * 255), ~~(Math.random() * 255)]
+        if (r[0] > r[1]) r[1] = [r[0], r[0] = r[1]][0] // ensure r[0] < r[1]
+        return {
+                on,
+                color: {
+                        red: r[0],
+                        green: r[1] - r[0],
+                        blue: 255 - r[1]
+                }
         }
-})
-
+}
 var lightHistory = []
 app.get('/history', async (_, res) => res.send(lightHistory))
 var getLightState = async (light) => light.queryState().then((data) => data)
@@ -77,11 +80,9 @@ var updateLightState = async (light, newState) => {
 
         // Promises to change the light state
         var lightColorPromise = (light, colorState) =>
-                new Promise((resolve, reject) =>
-                        light.setColor(...colorState, resolve))
+                new Promise(resolve => light.setColor(...colorState, resolve))
         var lightPowerPromise = (light, powerState) =>
-                new Promise((resolve, reject) =>
-                        light.setPower(powerState, resolve))
+                new Promise(resolve => light.setPower(powerState, resolve))
 
         // compare old state to new state and make promise when necessary
         var areColorsEqual = (a, b) =>
@@ -94,17 +95,16 @@ var updateLightState = async (light, newState) => {
 
         newState["time"] = await getNow()
         lightHistory.push(newState)
+        console.log(newState)
         return newState
 }
 var readColor = (color) => { // "rgb(0, 0, 0)" or color: {red, green, blue} -> [0, 0, 0]  
-        let readQueryColorObj = (color) => [color.red, color.green, color.blue]
-        let readColorPickerString = (colorString) => [
-                Number(colorString.split(',')[0].slice(4)),
-                Number(colorString.split(',')[1].slice(1)),
-                Number(colorString.split(',')[2].slice(1, -1))
+        if (typeof color == 'object') return Object.values(color)
+        if (typeof color == 'string') return [
+                Number(color.r(',')[0].slice(4)),
+                Number(color.r(',')[1].slice(1)),
+                Number(color.r(',')[2].slice(1, -1))
         ]
-        if (typeof color == 'string') return readColorPickerString(color)
-        if (typeof color == 'object') return readQueryColorObj(color)
 }
 
 main()
