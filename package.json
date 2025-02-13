@@ -4,8 +4,9 @@
         "description": "a webapp for controlling magic-home lights",
         "main": "app.js",
         "scripts": {
-                "start": "tmux new -s webapp -n panel -d 'node app.js'",
-                "debug": "nodemon app.js"
+		"start": "node app.js",
+                "tmux_start": "tmux new -s webapp -n panel -d 'node app.js'",
+                "debug": "lightmon node"
         },
         "keywords": [],
         "author": "Aquarock",
